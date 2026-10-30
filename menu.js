@@ -69,8 +69,16 @@ const MENU = [
       zh: "新鲜扎啤", ar: "طازجة من البرميل" } },
     { n: "Paulaner Hefeweizen",  s: "0,5 l",  p: "6,00" },
     { n: "Paulaner Alkoholfrei", s: "0,5 l",  p: "6,00" },
-    { n: "Schlösser Altbier vom Fass", s: "0,25 l", p: "3,50" },
-    { n: "Schlösser Altbier vom Fass", s: "0,4 l",  p: "4,90" }
+    { n: "Schlösser Altbier", s: "0,25 l", p: "3,50" , d: {
+      de: "frisch gezapft vom Fass", en: "freshly tapped from the barrel",
+      fr: "pression, fraîchement tirée", es: "de barril, recién tirada",
+      it: "alla spina, appena spillata", tr: "fıçıdan taze",
+      zh: "新鲜扎啤", ar: "طازجة من البرميل" } }
+    { n: "Schlösser Altbier", s: "0,4 l",  p: "4,90" , d: {
+      de: "frisch gezapft vom Fass", en: "freshly tapped from the barrel",
+      fr: "pression, fraîchement tirée", es: "de barril, recién tirada",
+      it: "alla spina, appena spillata", tr: "fıçıdan taze",
+      zh: "新鲜扎啤", ar: "طازجة من البرميل" }}
   ]},
 
   { id: "wine", part: "drinks", items: [
