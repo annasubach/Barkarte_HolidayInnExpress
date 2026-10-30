@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="de" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Speisekarte · Express Café &amp; Bar</title>
+<meta name="description" content="Speise- und Getränkekarte der Express Café &amp; Bar im Holiday Inn Express Düsseldorf Airport.">
+<meta name="theme-color" content="#0F2C6E">
+<style>
+  /* =====================================================================
+     Gleiches Gestaltungssystem wie die Gästeseite:
+     Markenfarben aus dem Logo, keine Emojis, keine externen Schriften,
+     Skripte oder Bilder. Die Seite funktioniert ohne Internetverbindung.
+     ===================================================================== */
+  :root {
+    --navy:#0F2C6E; --navy-deep:#0A1F4F; --slate:#284354;
+    --terra:#D75E3B; --terra-dark:#B44B2C; --teal:#57BED6;
+    --green:#1F7A4C; --gold-bg:#FBF3EC;
+    --ink:#1E2329; --muted:#6A7078; --line:#E3E1DD; --line-soft:#EFEDE9;
+    --paper:#F7F5F2; --card:#FFFFFF;
+    --sans:"Segoe UI",-apple-system,BlinkMacSystemFont,Roboto,"Helvetica Neue",
+           "Noto Sans","Noto Sans Arabic","Noto Sans SC",Arial,sans-serif;
+  }
+  * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html { scroll-behavior:smooth; scroll-padding-top:62px; -webkit-text-size-adjust:100%; }
+  body { margin:0; background:var(--paper); color:var(--ink); font-family:var(--sans);
+         line-height:1.5; font-size:16px; -webkit-font-smoothing:antialiased;
+         overflow-wrap:break-word; }
+  .wrap { max-width:680px; margin:0 auto; }
+
+  /* -------------------------------- Kopf -------------------------------- */
+  header { background:var(--navy); color:#fff; }
+  .head-inner { padding:16px 22px 26px; }
+  .head-top { display:flex; align-items:flex-start; justify-content:space-between;
+              gap:14px; margin-bottom:24px; }
+  .logo { width:112px; height:auto; display:block; flex:none; }
+
+  .lang { position:relative; flex:none; }
+  .lang-btn { display:inline-flex; align-items:center; gap:7px; background:none; border:0;
+              border-bottom:1px solid rgba(255,255,255,.45); color:#fff; padding:4px 2px;
+              cursor:pointer; font-family:inherit; font-size:.72rem; font-weight:600;
+              text-transform:uppercase; letter-spacing:.14em; min-height:44px; }
+  .lang-menu { position:absolute; top:calc(100% + 10px); inset-inline-end:0; background:#fff;
+               padding:5px; display:none; z-index:60; min-width:170px;
+               box-shadow:0 16px 40px rgba(10,31,79,.3); }
+  .lang-menu.open { display:block; }
+  .lang-menu button { display:block; width:100%; text-align:start; background:none; border:0;
+                      padding:11px 13px; font-family:inherit; font-size:.92rem;
+                      color:var(--ink); cursor:pointer; }
+  .lang-menu button[aria-current="true"] { color:var(--terra); font-weight:700; }
+
+  h1 { margin:0; font-size:clamp(1.9rem,8.5vw,2.7rem); line-height:1; font-weight:800;
+       letter-spacing:-.02em; text-transform:uppercase; }
+  .tagline { margin:12px 0 0; font-size:.68rem; text-transform:uppercase;
+             letter-spacing:.2em; color:var(--teal); font-weight:700; }
+  .hours { margin-top:20px; padding-top:15px; border-top:1px solid rgba(255,255,255,.22); }
+  .hours b { display:block; font-size:.64rem; text-transform:uppercase; letter-spacing:.16em;
+             opacity:.7; font-weight:700; margin-bottom:3px; }
+  .hours span { font-size:1rem; font-weight:600; }
+  .hours p { margin:8px 0 0; font-size:.83rem; opacity:.78; line-height:1.5; }
+
+  /* --------------------------- Sprungnavigation -------------------------- */
+  .chipbar { position:sticky; top:0; z-index:40; background:var(--card);
+             border-bottom:1px solid var(--line); }
+  .chips { display:flex; gap:7px; overflow-x:auto; padding:11px 22px;
+           scrollbar-width:none; -webkit-overflow-scrolling:touch; }
+  .chips::-webkit-scrollbar { display:none; }
+  .chips a { flex:none; display:inline-flex; align-items:center; white-space:nowrap;
+             border:1px solid var(--line); padding:9px 14px; font-size:.74rem;
+             font-weight:700; text-transform:uppercase; letter-spacing:.09em;
+             color:var(--ink); text-decoration:none; min-height:40px; }
+  .chips a.on { background:var(--navy); border-color:var(--navy); color:#fff; }
+
+  /* ------------------------------ Kategorien ----------------------------- */
+  .part { padding:30px 22px 6px; }
+  .part h2 { margin:0; font-size:.68rem; font-weight:800; text-transform:uppercase;
+             letter-spacing:.22em; color:var(--muted); display:flex; align-items:center; gap:12px; }
+  .part h2::after { content:""; flex:1; height:1px; background:var(--line); }
+
+  .cat { background:var(--card); border-bottom:1px solid var(--line);
+         padding:22px 22px 24px; }
+  .cat h3 { margin:0 0 4px; font-size:.92rem; font-weight:800; text-transform:uppercase;
+            letter-spacing:.1em; color:var(--navy); }
+  .cat .catnote { margin:0 0 12px; font-size:.75rem; color:var(--muted);
+                  text-transform:uppercase; letter-spacing:.09em; font-weight:600; }
+  .cat h3 + .items { margin-top:12px; }
+
+  .sub { margin:16px 0 4px; font-size:.66rem; font-weight:700; text-transform:uppercase;
+         letter-spacing:.13em; color:var(--terra-dark); }
+  .sub:first-child { margin-top:0; }
+
+  .item { display:flex; gap:16px; align-items:baseline; padding:10px 0;
+          border-bottom:1px solid var(--line-soft); }
+  .item:last-child { border-bottom:0; padding-bottom:0; }
+  .item .n { flex:1; min-width:0; }
+  .item .n b { font-weight:600; font-size:.98rem; }
+  .item .n span { display:block; font-size:.81rem; color:var(--muted);
+                  line-height:1.45; margin-top:2px; }
+  .item .p { flex:none; text-align:end; font-size:.93rem; font-weight:700;
+             font-variant-numeric:tabular-nums; white-space:nowrap; }
+  /* Mehrere Größen stehen nebeneinander unter dem Namen, wie auf der
+     gedruckten Karte – das hält die Zeilen flach. */
+  .vars { display:flex; flex-wrap:wrap; gap:4px 18px; margin-top:5px; }
+  .vars span { font-size:.84rem; font-weight:700; font-variant-numeric:tabular-nums;
+               white-space:nowrap; }
+  .vars i { font-style:normal; font-weight:600; color:var(--muted);
+            margin-inline-end:5px; }
+  .tag { display:inline-block; margin-inline-start:7px; font-size:.58rem; font-weight:800;
+         text-transform:uppercase; letter-spacing:.08em; color:var(--green);
+         border:1px solid #BFDCCB; padding:1px 5px; vertical-align:middle; }
+
+  .foot { margin-top:14px; padding-top:12px; border-top:1px solid var(--line);
+          font-size:.8rem; color:var(--muted); }
+
+  .offer { margin-top:16px; background:var(--gold-bg); border:1px solid #E8C9B4;
+           padding:14px 16px; }
+  .offer b { display:block; font-size:.64rem; font-weight:800; text-transform:uppercase;
+             letter-spacing:.14em; color:var(--terra-dark); margin-bottom:4px; }
+  .offer span { font-size:.9rem; line-height:1.5; }
+
+  /* ------------------------------- Abschluss ----------------------------- */
+  .info { background:var(--card); border-bottom:1px solid var(--line); padding:24px 22px; }
+  .info h3 { margin:0 0 8px; font-size:.8rem; font-weight:800; text-transform:uppercase;
+             letter-spacing:.14em; color:var(--navy); }
+  .info p { margin:0; font-size:.88rem; color:var(--muted); line-height:1.6; }
+
+  .qr { background:var(--slate); color:#fff; padding:32px 22px; text-align:center; }
+  .qr h3 { margin:0 0 7px; font-size:.78rem; font-weight:800; text-transform:uppercase;
+           letter-spacing:.16em; }
+  .qr p { margin:0 auto 18px; font-size:.84rem; opacity:.78; max-width:26em; }
+  #qrcode { display:inline-block; background:#fff; padding:11px; line-height:0; }
+  #qrcode svg { display:block; width:140px; height:140px; }
+
+  footer { padding:26px 22px 42px; text-align:center; font-size:.84rem;
+           color:var(--muted); background:var(--paper); font-weight:600; }
+  .demo { background:var(--navy-deep); color:rgba(255,255,255,.85); font-size:.66rem;
+          text-align:center; padding:9px 18px; letter-spacing:.1em; text-transform:uppercase; }
+</style>
+</head>
+<body>
+
+<div class="demo" dir="ltr">Entwurf zur Abstimmung – Inhalte und Gestaltung noch änderbar</div>
+
+<header>
+  <div class="wrap head-inner">
+    <div class="head-top">
+      <img class="logo" id="logo" alt="Holiday Inn Express by IHG" src="logo.png">
+      <div class="lang">
+        <button class="lang-btn" id="langBtn" aria-haspopup="true" aria-expanded="false">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 2.5 15.3 0 18M12 3c-2.5 2.7-2.5 15.3 0 18"/>
+          </svg>
+          <span id="langBtnLabel">Deutsch</span>
+        </button>
+        <div class="lang-menu" id="langMenu" role="menu"></div>
+      </div>
+    </div>
+    <h1 id="brand">Express Café &amp; Bar</h1>
+    <p class="tagline" id="tagline"></p>
+    <div class="hours">
+      <b id="hoursK"></b><span id="hoursV"></span>
+      <p id="hoursNote"></p>
+    </div>
+  </div>
+</header>
+
+<nav class="chipbar"><div class="wrap"><div class="chips" id="chips"></div></div></nav>
+
+<main id="menu"></main>
+
+<section class="info"><div class="wrap">
+  <h3 id="orderT"></h3><p id="orderV"></p>
+</div></section>
+
+<section class="info"><div class="wrap">
+  <p id="allergens"></p>
+</div></section>
+
+<section class="qr"><div class="wrap">
+  <h3 id="qrT"></h3><p id="qrV"></p>
+  <div id="qrcode"></div>
+</div></section>
+
+<footer><div class="wrap" id="footer"></div></footer>
+
+<script src="qr.js"></script>
+<script src="i18n.js"></script>
+<script src="menu.js"></script>
+
+<script>
+/* =========================================================================
+   LOGIK – baut die Karte aus MENU und T auf.
+   ========================================================================= */
+let lang = "de";
+
+function esc(s) {
+  return String(s).replace(/[&<>"']/g, c =>
+    ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]));
+}
+
+/* "@cup" wird zur übersetzten Einheit, alles andere bleibt wie es ist */
+function unit(t, s) {
+  if (!s) return "";
+  return s.charAt(0) === "@" ? (t.units[s.slice(1)] || s.slice(1)) : s;
+}
+
+function render(l) {
+  const t = T[l];
+  if (!t) return;
+  lang = l;
+  document.documentElement.lang = l;
+  document.documentElement.dir = t.dir;
+
+  const set = (id, v) => document.getElementById(id).textContent = v;
+  set("brand", t.brand);        set("tagline", t.tagline);
+  set("hoursK", t.hoursK);      set("hoursV", t.hoursV);
+  set("hoursNote", t.hoursNote);
+  set("orderT", t.orderT);      set("orderV", t.orderV);
+  set("allergens", t.allergens);
+  set("qrT", t.qrT);            set("qrV", t.qrV);
+  set("footer", t.footer);      set("langBtnLabel", t.label);
+
+  /* Sprungnavigation */
+  document.getElementById("chips").innerHTML = MENU.map(c =>
+    '<a href="#' + c.id + '">' + esc(t.cats[c.id] || c.id) + '</a>').join("");
+
+  /* Karte */
+  let html = "", part = null;
+  MENU.forEach(cat => {
+    if (cat.part !== part) {
+      part = cat.part;
+      html += '<section class="part"><div class="wrap"><h2>'
+            + esc(part === "drinks" ? t.partDrinks : t.partFood) + '</h2></div></section>';
+    }
+
+    const items = cat.items.map(it => {
+      const desc = [unit(t, it.s), it.d ? (it.d[l] || it.d.en || it.d.de) : ""]
+                     .filter(Boolean).join(" · ");
+      const tag = it.tag ? '<span class="tag">' + esc(t.tags[it.tag]) + '</span>' : "";
+
+      /* Ein Preis steht rechts, mehrere stehen als Zeile unter dem Namen */
+      const vars = it.v
+        ? '<div class="vars">' + it.v.map(x =>
+            '<span><i>' + esc(unit(t, x.l)) + '</i>' + esc(x.p) + ' €</span>').join("") + '</div>'
+        : "";
+
+      return (it.sub ? '<p class="sub">' + esc(t.subs[it.sub] || it.sub) + '</p>' : "")
+        + '<div class="item"><div class="n"><b>' + esc(it.n) + '</b>' + tag
+        + (desc ? '<span>' + esc(desc) + '</span>' : "") + vars
+        + '</div><div class="p">' + (it.p ? esc(it.p) + ' €' : "") + '</div></div>';
+    }).join("");
+
+    html += '<section class="cat" id="' + cat.id + '"><div class="wrap">'
+          + '<h3>' + esc(t.cats[cat.id] || cat.id) + '</h3>'
+          + (cat.note ? '<p class="catnote">' + esc(t[cat.note]) + '</p>' : "")
+          + '<div class="items">' + items + '</div>'
+          + (cat.offer ? '<div class="offer"><b>' + esc(t.offerT) + '</b><span>'
+                       + esc(t.offerV) + '</span></div>' : "")
+          + (cat.foot ? '<p class="foot">' + esc(t[cat.foot]) + '</p>' : "")
+          + '</div></section>';
+  });
+  document.getElementById("menu").innerHTML = html;
+
+  document.querySelectorAll("#langMenu button").forEach(b =>
+    b.setAttribute("aria-current", b.dataset.lang === l ? "true" : "false"));
+  closeMenu();
+  markChip();
+}
+
+/* Hebt im Chipbalken hervor, welcher Bereich gerade sichtbar ist */
+function markChip() {
+  const tops = MENU.map(c => {
+    const el = document.getElementById(c.id);
+    return { id: c.id, y: el ? el.getBoundingClientRect().top : 1e9 };
+  });
+  let active = tops[0];
+  tops.forEach(x => { if (x.y <= 80) active = x; });
+  document.querySelectorAll("#chips a").forEach(a =>
+    a.classList.toggle("on", a.getAttribute("href") === "#" + active.id));
+}
+let ticking = false;
+window.addEventListener("scroll", () => {
+  if (ticking) return;
+  ticking = true;
+  requestAnimationFrame(() => { markChip(); ticking = false; });
+}, { passive: true });
+
+/* --------------------------- Sprachumschalter --------------------------- */
+const langBtn = document.getElementById("langBtn"), langMenu = document.getElementById("langMenu");
+function closeMenu() { langMenu.classList.remove("open"); langBtn.setAttribute("aria-expanded","false"); }
+langMenu.innerHTML = LANGS.map(l =>
+  '<button role="menuitem" data-lang="' + l + '" lang="' + l + '">' + esc(T[l].label) + '</button>').join("");
+langMenu.addEventListener("click", e => {
+  const b = e.target.closest("button");
+  if (b) render(b.dataset.lang);
+});
+langBtn.addEventListener("click", e => {
+  e.stopPropagation();
+  langBtn.setAttribute("aria-expanded", String(langMenu.classList.toggle("open")));
+});
+document.addEventListener("click", closeMenu);
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeMenu(); });
+
+/* ------------------------ Sprache automatisch wählen -------------------- */
+const bl = (navigator.language || "de").slice(0,2).toLowerCase();
+render(LANGS.indexOf(bl) >= 0 ? bl : "de");
+
+/* ------------------------------- QR-Code -------------------------------- */
+/* Kodiert die Adresse, unter der die Karte gerade läuft.                   */
+try {
+  document.getElementById("qrcode").innerHTML =
+    QR.svg(window.location.href.split("#")[0], { dark:"#284354", light:"#ffffff", quiet:2 });
+} catch (e) {
+  document.querySelector(".qr").style.display = "none";
+}
+</script>
+</body>
+</html>
