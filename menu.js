@@ -73,7 +73,7 @@ const MENU = [
       de: "frisch gezapft vom Fass", en: "freshly tapped from the barrel",
       fr: "pression, fraîchement tirée", es: "de barril, recién tirada",
       it: "alla spina, appena spillata", tr: "fıçıdan taze",
-      zh: "新鲜扎啤", ar: "طازجة من البرميل" } }
+      zh: "新鲜扎啤", ar: "طازجة من البرميل" } },
     { n: "Schlösser Altbier", s: "0,4 l",  p: "4,90" , d: {
       de: "frisch gezapft vom Fass", en: "freshly tapped from the barrel",
       fr: "pression, fraîchement tirée", es: "de barril, recién tirada",
